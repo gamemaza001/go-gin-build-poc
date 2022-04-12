@@ -6,7 +6,6 @@ import (
 	"net/http"
 	model "go-api-poc/model"
 	_ "github.com/lib/pq"
-	"database/sql"
 )
 
 var books = []model.Book{
