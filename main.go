@@ -6,6 +6,7 @@ import (
 	"net/http"
 	model "go-api-poc/model"
 	_ "github.com/lib/pq"
+	"database/sql"
 )
 
 var books = []model.Book{
@@ -15,11 +16,11 @@ var books = []model.Book{
 }
 
 const (
-	host     = "localhost"
-	port     = 5433
-	user     = "postgres"
-	password = "1qaz2wsxM!"
-	dbname   = "testgolang"
+	host     = "rptcomm.postgres.database.azure.com"
+	port     = 5432
+	user     = "rpt_read"
+	password = "rpt1234!!"
+	dbname   = "rpt_poc"
   )
 
 
@@ -29,20 +30,20 @@ func main() {
 	r := gin.New()
 	r.GET("/books", func(c *gin.Context) {
 		c.JSON(http.StatusOK, books)
-		// psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		// "password=%s dbname=%s sslmode=disable",
-		// host, port, user, password, dbname)
-		// db, err := sql.Open("postgres", psqlInfo)
-		// if err != nil {
-		// 	panic(err)
-		// }
-		// defer db.Close()
+		psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+		db, err := sql.Open("postgres", psqlInfo)
+		if err != nil {
+			panic(err)
+		}
+		defer db.Close()
 
-		// err = db.Ping()
-		// if err != nil {
-		// 	panic(err)
-		// }
-		// fmt.Println("Successfully connected!")
+		err = db.Ping()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Successfully connected!")
 		fmt.Println("Hello World!")
 	})
 
