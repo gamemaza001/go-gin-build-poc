@@ -31,7 +31,7 @@ func main() {
 	r.GET("/books", func(c *gin.Context) {
 		c.JSON(http.StatusOK, books)
 		psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
+		"password=%s dbname=%s",
 		host, port, user, password, dbname)
 		db, err := sql.Open("postgres", psqlInfo)
 		if err != nil {
