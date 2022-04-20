@@ -1,18 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
-	"net/http"
-	model "go-api-poc/model"
-	_ "github.com/lib/pq"
 	"database/sql"
+	"fmt"
+	model "go-api-poc/model"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 var books = []model.Book{
-	{Unique_id: "1", Name: "Harry Potter", Age: 24},
-	{Unique_id: "2", Name: "The Lord of the Rings", Age: 34},
-	{Unique_id: "3", Name: "The Wizard of Oz", Age: 15},
+	{Name: "Harry Potter", Age: 24},
+	{Name: "The Lord of the Rings", Age: 34},
+	{Name: "The Wizard of Oz", Age: 15},
 }
 
 const (
@@ -21,45 +22,50 @@ const (
 	user     = "rpt_read"
 	password = "rpt1234!!"
 	dbname   = "rpt_poc"
-  )
-
+)
 
 func main() {
 
-	
 	r := gin.New()
 	r.GET("/books", func(c *gin.Context) {
 		c.JSON(http.StatusOK, books)
-		psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s",
-		host, port, user, password, dbname)
-		db, err := sql.Open("postgres", psqlInfo)
-		if err != nil {
-			panic(err)
-		}
-		defer db.Close()
-
-		err = db.Ping()
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("Successfully connected!")
 		fmt.Println("Hello World!")
 	})
 
 	r.POST("/books", func(c *gin.Context) {
+
+		// model
 		var book model.Book
-	
+
+		// config db
+		psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+			"password=%s dbname=%s",
+			host, port, user, password, dbname)
+
+		// connect DB
+		db, err := sql.Open("postgres", psqlInfo)
+
 		if err := c.ShouldBindJSON(&book); err != nil {
-			fmt.Println(err);
+			fmt.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
 			return
 		}
-	
-		books = append(books, book)
-	
+
+		insertStatement := `INSERT INTO books (Name, Age) VALUES ($1, $2)`
+
+		_, err = db.Exec(insertStatement, book.Name, book.Age)
+
+		if err != nil {
+			panic(err)
+		}
+
+		// books = append(books, book)
+
+		// close connection
+		defer db.Close()
+
 		c.JSON(http.StatusCreated, book)
 	})
 
