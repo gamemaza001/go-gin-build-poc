@@ -62,7 +62,7 @@ func main() {
 
 		insertStatement := `INSERT INTO books (Name, Age) VALUES ($1, $2)`
 
-		rows, err := db.Query(insertStatement, book.Name, book.Age)
+		_, err = db.Query(insertStatement, book.Name, book.Age)
 		// rows, err := db.Query(insertStatement, book.Name, book.Age)
 
 		if err != nil {
@@ -72,7 +72,7 @@ func main() {
 		// books = append(books, book)
 
 		// close connection
-		rows.Close()
+		db.Close()
 
 		c.JSON(http.StatusCreated, book)
 	})
