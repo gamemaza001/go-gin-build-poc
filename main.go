@@ -62,7 +62,7 @@ func main() {
 
 		insertStatement := `INSERT INTO books (Name, Age) VALUES ($1, $2)`
 
-		_, err = db.Query(insertStatement, book.Name, book.Age)
+		_, err = db.Exec(insertStatement, book.Name, book.Age)
 		// rows, err := db.Query(insertStatement, book.Name, book.Age)
 
 		if err != nil {
