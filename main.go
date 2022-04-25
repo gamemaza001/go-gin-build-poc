@@ -56,8 +56,8 @@ func main() {
 			})
 			return
 		}
-		db.SetMaxOpenConns(3)
-		db.SetMaxIdleConns(3)
+		db.SetMaxOpenConns(5)
+		db.SetMaxIdleConns(5)
 		// db.SetMaxOpenConns(25)
 		// db.SetMaxIdleConns(25)
 
