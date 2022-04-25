@@ -56,7 +56,6 @@ func main() {
 			})
 			return
 		}
-		db.SetMaxIdleConns(1)
 
 		insertStatement := `INSERT INTO books (Name, Age) VALUES ($1, $2)`
 
