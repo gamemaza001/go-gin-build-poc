@@ -56,12 +56,13 @@ func main() {
 			})
 			return
 		}
-		db.SetMaxOpenConns(10)
-		db.SetMaxIdleConns(5)
+		// db.SetConnMaxLifetime(0)
+		// db.SetMaxOpenConns(10)
+		// db.SetMaxIdleConns(5)
 
 		insertStatement := `INSERT INTO books (Name, Age) VALUES ($1, $2)`
 
-		_, err = db.Exec(insertStatement, book.Name, book.Age)
+		rows, err := db.Query(insertStatement, book.Name, book.Age)
 		// rows, err := db.Query(insertStatement, book.Name, book.Age)
 
 		if err != nil {
@@ -71,7 +72,7 @@ func main() {
 		// books = append(books, book)
 
 		// close connection
-		defer db.Close()
+		rows.Close()
 
 		c.JSON(http.StatusCreated, book)
 	})
