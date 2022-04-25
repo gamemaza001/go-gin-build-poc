@@ -16,6 +16,10 @@ var books = []model.Book{
 	{Name: "The Wizard of Oz", Age: 15},
 }
 
+var bookstest = []model.Book{
+	{Name: "The Wizard of Oz", Age: 15},
+}
+
 const (
 	host     = "rptcomm.postgres.database.azure.com"
 	port     = 5432
@@ -52,10 +56,13 @@ func main() {
 			})
 			return
 		}
+		// db.SetMaxOpenConns(3)
+		db.SetMaxIdleConns(10)
 
 		insertStatement := `INSERT INTO books (Name, Age) VALUES ($1, $2)`
 
 		_, err = db.Exec(insertStatement, book.Name, book.Age)
+		// rows, err := db.Query(insertStatement, book.Name, book.Age)
 
 		if err != nil {
 			panic(err)
