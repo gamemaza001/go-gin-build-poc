@@ -49,12 +49,16 @@ func main() {
 		// connect DB
 		db, err := sql.Open("postgres", psqlInfo)
 
-		if err := c.ShouldBindJSON(&book); err != nil {
+		// if error = null 					
+		if err := c.ShouldBindJSON(&book); 
+		// else != null
+		err != nil {
 			fmt.Println(err)
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-			return
+			db, err = sql.Open("postgres", psqlInfo)
+			// c.JSON(http.StatusBadRequest, gin.H{
+			// 	"error": err.Error(),
+			// })
+			// return
 		}
 		db.SetConnMaxLifetime(0)
 		db.SetMaxOpenConns(5)
