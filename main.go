@@ -57,11 +57,12 @@ func main() {
 			})
 			return
 		}
+
 		db.SetConnMaxLifetime(0)
 		db.SetMaxOpenConns(5)
 		db.SetMaxIdleConns(5)
 
-		// insertStatement := `INSERT INTO books (Name, Age) VALUES ($1, $2)`
+		// insertStatement := `INSERT INTO  books (Name, Age) VALUES ($1, $2)`
 
 		_, err = db.Exec(`INSERT INTO books (Name, Age) VALUES ($1, $2)`, book.Name, book.Age)
 		// rows, err := db.Query(insertStatement, book.Name, book.Age)
